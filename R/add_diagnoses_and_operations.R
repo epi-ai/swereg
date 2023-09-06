@@ -109,7 +109,8 @@ add_diagnoses_or_operations <- function(
     )
   } else {
     variables_containing_codes <- c(
-      "OP"
+      stringr::str_subset(names(diagnoses_and_operations), "^OP"),
+      stringr::str_subset(names(diagnoses_and_operations), "^op")
     )
   }
 
