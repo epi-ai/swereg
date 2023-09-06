@@ -103,7 +103,8 @@ add_diagnoses_or_operations <- function(
 
   if(type == "diags"){
     variables_containing_codes <- c(
-      "HDIA",
+      stringr::str_subset(names(diagnoses_and_operations), "^HDIA"),
+      stringr::str_subset(names(diagnoses_and_operations), "^hdia"),
       stringr::str_subset(names(diagnoses_and_operations), "^DIA"),
       stringr::str_subset(names(diagnoses_and_operations), "^EKOD")
     )
