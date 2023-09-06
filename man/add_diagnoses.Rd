@@ -8,7 +8,7 @@ add_diagnoses(
   skeleton,
   diagnoses_and_operations,
   id_name,
-  diagnoses = list(icd10_F64_0 = c("^F640"), icd10_F64_89 = c("^F6489"), icd10_F64_089 =
+  diags = list(icd10_F64_0 = c("^F640"), icd10_F64_89 = c("^F6489"), icd10_F64_089 =
     c("^F640", "^F648", "^F649"))
 )
 }

@@ -8,7 +8,7 @@ add_operations(
   skeleton,
   diagnoses_and_operations,
   id_name,
-  operations = list(op_afab_mastectomy = c("HAC10", "HAC20", "HAC99", "HAC15"),
+  ops = list(op_afab_mastectomy = c("HAC10", "HAC20", "HAC99", "HAC15"),
     op_afab_breast_reconst_and_other_breast_ops = c("HAD20", "HAD30", "HAD35", "HAD99",
     "HAE99"), op_afab_penis_test_prosth = c("KFH50", "KGV30", "KGW96", "KGH96"),
     op_afab_internal_genital = c("LCD00", "LCD01", "LCD04", "LCD10", "LCD11", "LCD96",
