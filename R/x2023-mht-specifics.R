@@ -222,7 +222,7 @@ x2023_mht_add_lmed <- function(skeleton, folder){
       "fddd"
     )
   )
-  LMED <- LMED[P1193_LopNr_PersonNr %in% ids]
+  LMED <- LMED[P1193_LopNr_PersonNr %in% unique(skeleton$id)]
   x2023_mht_lmed_categorize_product_names(LMED)
   LMED <- LMED[!is.na(product_category)]
   LMED[, start_date := EDATUM]
