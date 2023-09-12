@@ -12,7 +12,7 @@ URL: https://www.csids.no/covidnor/, https://github.com/csids/covidnor
 BugReports: https://github.com/csids/covidnor/issues
 Encoding: UTF-8
 LazyData: true
-Imports: data.table, cstime
+Imports: data.table, cstime, fs, readxl, stringr
 Suggests: testthat,
     knitr,
     rmarkdown,
