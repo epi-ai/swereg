@@ -148,27 +148,28 @@ x2023_mht_apply_lmed_categories_to_skeleton <- function(skeleton, LMED){
     "H1",
     "I1", "I2"
   )
-
+  setkey(LMED, start_isoyearweek, stop_isoyearweek, product_category)
+  setkey(skeleton, id, isoyearweek)
   for(product in product_categories){
     skeleton[,(product) := FALSE]
   }
   for(product in product_categories){
+    message(Sys.time()," ", product)
+    LMED_product <- LMED[product_category == product]
     for(x_isoyearweek in sort(unique(skeleton$isoyearweek))){
       # identify all the women who received A1 in 2021-M01
-      women_in_category_and_isoyearweek <- LMED[
-        (start_isoyearweek <= x_isoyearweek & x_isoyearweek >= stop_isoyearweek) &
-          product_category == product
+      women_in_category_and_isoyearweek <- LMED_product[
+        (start_isoyearweek <= x_isoyearweek & x_isoyearweek >= stop_isoyearweek)
       ]$P1193_LopNr_PersonNr %>% unique()
 
       # assign A1:=TRUE for all the women we found above, in 2021-M01
       skeleton[
-        id %in% women_in_category_and_isoyearweek &
-          isoyearweek == x_isoyearweek,
+        .(women_in_category_and_isoyearweek, x_isoyearweek),
         (product) := TRUE
       ]
     }
   }
-  setorder(skeleton,id, isoyearweek )
+  setorder(skeleton, id, isoyearweek)
 }
 
 x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
@@ -239,5 +240,6 @@ x2023_mht_add_lmed <- function(skeleton, folder){
   x2023_mht_apply_lmed_categories_to_skeleton(skeleton, LMED)
   message(Sys.time(), " LMED apply approaches ")
   x2023_mht_apply_lmed_approaches_to_skeleton(skeleton)
+  message(Sys.time(), " LMED finished ")
   data.table::shouldPrint(skeleton)
 }
