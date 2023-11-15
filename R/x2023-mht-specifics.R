@@ -190,6 +190,10 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
       formula <- glue::glue("{x_approach$includes1}==T")
       if(!is.na(x_approach$includes2)) formula <- glue::glue("{formula} & {x_approach$includes2}==T")
 
+      for(k in 1:30){
+        dontinclude <- paste0("doesnotinclude",k)
+        if(!is.na(x_approach[[dontinclude]])) formula <- glue::glue("{formula} & {x_approach[[dontinclude]]}==F")
+      }
       formula <- glue::glue(
         'skeleton[{formula}, {x_approach$variable} := TRUE]'
       )
