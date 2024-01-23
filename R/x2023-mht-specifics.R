@@ -159,9 +159,10 @@ x2023_mht_apply_lmed_categories_to_skeleton <- function(skeleton, LMED){
     for(x_isoyearweek in sort(unique(skeleton$isoyearweek))){
       # identify all the women who received A1 in 2021-M01
       women_in_category_and_isoyearweek <- LMED_product[
-        (start_isoyearweek <= x_isoyearweek & x_isoyearweek >= stop_isoyearweek)
+        (start_isoyearweek <= x_isoyearweek & x_isoyearweek <= stop_isoyearweek)
       ]$P1193_LopNr_PersonNr %>% unique()
 
+      if(length(women_in_category_and_isoyearweek)==0) next()
       # assign A1:=TRUE for all the women we found above, in 2021-M01
       skeleton[
         .(women_in_category_and_isoyearweek, x_isoyearweek),

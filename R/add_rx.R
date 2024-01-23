@@ -29,7 +29,7 @@ add_rx <- function(
       for(x_isoyearweek in sort(unique(skeleton$isoyearweek))){
         # identify all the women who received A1 in 2021-M01
         women_in_category_and_isoyearweek <- lmed_atc[
-          (start_isoyearweek <= x_isoyearweek & x_isoyearweek >= stop_isoyearweek)
+          (start_isoyearweek <= x_isoyearweek & x_isoyearweek <= stop_isoyearweek)
         ][[id_name]] %>% unique()
 
         # assign A1:=TRUE for all the women we found above, in 2021-M01
