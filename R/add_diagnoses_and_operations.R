@@ -1,9 +1,31 @@
 #' COVID-19 data for total age/sex in Norway (2020 border).
 #'
 #' @export
+add_cods <- function(
+    skeleton,
+    dataset,
+    id_name,
+    cods = list(
+      "icd10_F64_0" = c("^F640"),
+      "icd10_F64_89" = c("^F6489"),
+      "icd10_F64_089" = c("^F640", "^F648", "^F649")
+    )
+){
+  add_diagnoses_or_operations_or_cods(
+    skeleton = skeleton,
+    dataset = dataset,
+    id_name = id_name,
+    diags_or_ops_or_cods = diags,
+    type = "cods"
+  )
+}
+
+#' COVID-19 data for total age/sex in Norway (2020 border).
+#'
+#' @export
 add_diagnoses <- function(
     skeleton,
-    diagnoses_and_operations,
+    dataset,
     id_name,
     diags = list(
       "icd10_F64_0" = c("^F640"),
@@ -13,9 +35,9 @@ add_diagnoses <- function(
 ){
   add_diagnoses_or_operations(
     skeleton = skeleton,
-    diagnoses_and_operations = diagnoses_and_operations,
+    dataset = dataset,
     id_name = id_name,
-    diags_or_ops = diags,
+    diags_or_ops_or_cods = diags,
     type = "diags"
   )
 }
@@ -25,7 +47,7 @@ add_diagnoses <- function(
 #' @export
 add_operations <- function(
     skeleton,
-    diagnoses_and_operations,
+    dataset,
     id_name,
     ops = list(
       "op_afab_mastectomy"= c(
@@ -84,64 +106,77 @@ add_operations <- function(
 ){
   add_diagnoses_or_operations(
     skeleton = skeleton,
-    diagnoses_and_operations = diagnoses_and_operations,
+    dataset = dataset,
     id_name = id_name,
-    diags_or_ops = ops,
+    diags_or_ops_or_cods = ops,
     type = "ops"
   )
 }
 
 
-add_diagnoses_or_operations <- function(
+add_diagnoses_or_operations_or_cods <- function(
     skeleton,
-    diagnoses_and_operations,
+    dataset,
     id_name,
-    diags_or_ops,
+    diags_or_ops_or_cods,
     type
 ){
   stopifnot(type %in% c("diags", "ops"))
 
   if(type == "diags"){
     variables_containing_codes <- c(
-      stringr::str_subset(names(diagnoses_and_operations), "^HDIA"),
-      stringr::str_subset(names(diagnoses_and_operations), "^hdia"),
-      stringr::str_subset(names(diagnoses_and_operations), "^DIA"),
-      stringr::str_subset(names(diagnoses_and_operations), "^EKOD")
+      stringr::str_subset(names(dataset), "^HDIA"),
+      stringr::str_subset(names(dataset), "^hdia"),
+      stringr::str_subset(names(dataset), "^DIA"),
+      stringr::str_subset(names(dataset), "^EKOD")
     )
-  } else {
+    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(INDATUM)]
+    min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
+    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(INDATUM),"-**")]
+
+  } else if(type == "ops") {
     variables_containing_codes <- c(
-      stringr::str_subset(names(diagnoses_and_operations), "^OP"),
-      stringr::str_subset(names(diagnoses_and_operations), "^op")
+      stringr::str_subset(names(dataset), "^OP"),
+      stringr::str_subset(names(dataset), "^op")
     )
-  }
+    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(INDATUM)]
+    min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
+    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(INDATUM),"-**")]
+  } else if(type == "cods") {
+    variables_containing_codes <- c(
+      stringr::str_subset(names(dataset), "^MORSAK"),
+      stringr::str_subset(names(dataset), "^morsak")
+    )
+    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(DODSDAT)]
+    min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
+    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(DODSDAT),"-**")]
+  } else stop("")
 
-  for(i in seq_along(diags_or_ops)){
-    nam <- names(diags_or_ops)[i]
+  for(i in seq_along(diags_or_ops_or_cods)){
+    nam <- names(diags_or_ops_or_cods)[i]
 
-    diagnoses_and_operations[, (nam) := FALSE]
-    diagnoses_and_operations[, XXX_EXCLUDE := FALSE]
+    dataset[, (nam) := FALSE]
+    dataset[, XXX_EXCLUDE := FALSE]
 
-    for(ii in variables_containing_codes) for(iii in diags_or_ops[[i]]){
+    for(ii in variables_containing_codes) for(iii in diags_or_ops_or_cods[[i]]){
       # check to see if it is an EXCLUSION factor or not
       if(stringr::str_detect(iii, "^!")){
         iii <- stringr::str_remove(iii, "!")
         iii <- paste0("^", iii)
-        diagnoses_and_operations[stringr::str_detect(get(ii), iii), XXX_EXCLUDE :=TRUE]
+        dataset[stringr::str_detect(get(ii), iii), XXX_EXCLUDE :=TRUE]
       } else {
         iii <- paste0("^", iii)
-        diagnoses_and_operations[stringr::str_detect(get(ii), iii), (nam):=TRUE]
+        dataset[stringr::str_detect(get(ii), iii), (nam):=TRUE]
       }
     }
-    diagnoses_and_operations[, (nam) := get(nam)==TRUE & XXX_EXCLUDE==FALSE]
-    diagnoses_and_operations[, XXX_EXCLUDE := NULL]
+    dataset[, (nam) := get(nam)==TRUE & XXX_EXCLUDE==FALSE]
+    dataset[, XXX_EXCLUDE := NULL]
   }
 
-  diagnoses_and_operations[, isoyearweek := cstime::date_to_isoyearweek_c(INDATUM)]
-  min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
-  diagnoses_and_operations[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(INDATUM),"-**")]
 
-  nam <- names(diags_or_ops)
-  txt <- paste0("reduced <- diagnoses_and_operations[, .(", paste0(nam,"=as.logical(max(",nam,"))", collapse=", "),"), keyby=.(",id_name,", isoyearweek)]")
+
+  nam <- names(diags_or_ops_or_cods)
+  txt <- paste0("reduced <- dataset[, .(", paste0(nam,"=as.logical(max(",nam,"))", collapse=", "),"), keyby=.(",id_name,", isoyearweek)]")
   eval(parse(text = txt))
 
   nam_left <- paste0(nam,collapse='","')

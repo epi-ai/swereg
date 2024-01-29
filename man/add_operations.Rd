@@ -6,7 +6,7 @@
 \usage{
 add_operations(
   skeleton,
-  diagnoses_and_operations,
+  dataset,
   id_name,
   ops = list(op_afab_mastectomy = c("HAC10", "HAC20", "HAC99", "HAC15"),
     op_afab_breast_reconst_and_other_breast_ops = c("HAD20", "HAD30", "HAD35", "HAD99",
