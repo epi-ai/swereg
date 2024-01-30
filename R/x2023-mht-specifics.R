@@ -217,32 +217,22 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
 }
 
 #' @export
-x2023_mht_add_lmed <- function(skeleton, folder){
+x2023_mht_add_lmed <- function(skeleton, lmed){
   message(Sys.time(), " LMED loading")
-  LMED <- data.table::fread(
-    fs::path(folder,"/sos/T_T_R_LMED__12831_2021.txt"),
-    select = c(
-      "P1193_LopNr_PersonNr",
-      "EDATUM",
-      "ATC",
-      "produkt",
-      "fddd"
-    )
-  )
   message(Sys.time(), " LMED restricting")
-  LMED <- LMED[P1193_LopNr_PersonNr %in% unique(skeleton$id)]
+  lmed <- lmed[P1193_LopNr_PersonNr %in% unique(skeleton$id)]
   message(Sys.time(), " LMED categorizing product names ")
-  x2023_mht_lmed_categorize_product_names(LMED)
+  x2023_mht_lmed_categorize_product_names(lmed)
   message(Sys.time(), " LMED reducing size ")
-  LMED <- LMED[!is.na(product_category)]
-  LMED[, start_date := EDATUM]
-  LMED[, stop_date := EDATUM + round(fddd)]
+  lmed <- lmed[!is.na(product_category)]
+  lmed[, start_date := EDATUM]
+  lmed[, stop_date := EDATUM + round(fddd)]
   message(Sys.time(), " LMED start/stop ")
-  LMED[, start_isoyearweek := cstime::date_to_isoyearweek_c(start_date)]
-  LMED[, stop_isoyearweek :=  cstime::date_to_isoyearweek_c(stop_date)]
+  lmed[, start_isoyearweek := cstime::date_to_isoyearweek_c(start_date)]
+  lmed[, stop_isoyearweek :=  cstime::date_to_isoyearweek_c(stop_date)]
 
   message(Sys.time(), " LMED apply categories to skeleton ")
-  x2023_mht_apply_lmed_categories_to_skeleton(skeleton, LMED)
+  x2023_mht_apply_lmed_categories_to_skeleton(skeleton, lmed)
   message(Sys.time(), " LMED apply approaches ")
   x2023_mht_apply_lmed_approaches_to_skeleton(skeleton)
   message(Sys.time(), " LMED finished ")
