@@ -33,7 +33,7 @@ add_diagnoses <- function(
       "icd10_F64_089" = c("^F640", "^F648", "^F649")
     )
 ){
-  add_diagnoses_or_operations(
+  add_diagnoses_or_operations_or_cods(
     skeleton = skeleton,
     dataset = dataset,
     id_name = id_name,
@@ -104,7 +104,7 @@ add_operations <- function(
       )
     )
 ){
-  add_diagnoses_or_operations(
+  add_diagnoses_or_operations_or_cods(
     skeleton = skeleton,
     dataset = dataset,
     id_name = id_name,
