@@ -128,7 +128,8 @@ add_diagnoses_or_operations_or_cods <- function(
       stringr::str_subset(names(dataset), "^HDIA"),
       stringr::str_subset(names(dataset), "^hdia"),
       stringr::str_subset(names(dataset), "^DIA"),
-      stringr::str_subset(names(dataset), "^EKOD")
+      stringr::str_subset(names(dataset), "^EKOD"),
+      stringr::str_subset(names(dataset), "^ICDO10")
     )
     dataset[, isoyearweek := cstime::date_to_isoyearweek_c(INDATUM)]
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
