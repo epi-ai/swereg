@@ -121,7 +121,7 @@ add_diagnoses_or_operations_or_cods <- function(
     diags_or_ops_or_cods,
     type
 ){
-  stopifnot(type %in% c("diags", "ops"))
+  stopifnot(type %in% c("diags", "ops", "cods"))
 
   if(type == "diags"){
     variables_containing_codes <- c(
