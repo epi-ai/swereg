@@ -15,7 +15,7 @@ add_cods <- function(
     skeleton = skeleton,
     dataset = dataset,
     id_name = id_name,
-    diags_or_ops_or_cods = diags,
+    diags_or_ops_or_cods = cods,
     type = "cods"
   )
 }
