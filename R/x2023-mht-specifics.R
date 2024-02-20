@@ -173,6 +173,19 @@ x2023_mht_apply_lmed_categories_to_skeleton <- function(skeleton, LMED){
   setorder(skeleton, id, isoyearweek)
 }
 
+x2023_mht_replace_false_runs <- function(x) {
+  runs <- rle(x)
+  runs$values[runs$values == FALSE & runs$lengths <= 4] <- TRUE
+  inverse.rle(runs)
+}
+
+x2023_mht_cumulative_reset <- function(x) {
+  grp_id <- rleid(!x)
+  cumsum_reset <- ave(x, grp_id, FUN = cumsum)
+  return(cumsum_reset)
+}
+
+
 x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
   # approaches
   data_approach <- readxl::read_excel(
@@ -201,19 +214,37 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
       eval(parse(text = formula))
     }
 
+    # fill in the missing gaps (up to four weeks)
+    for(j in unique(app$variable)){
+      if(j=="local_or_none_mht") next()
+      skeleton[, (j) := x2023_mht_replace_false_runs(get(j)), by=.(id)]
+    }
+
+    # how long they've been taking the drug for
+    run_vars <- c()
+    for(j in unique(app$variable)){
+      if(j=="local_or_none_mht") next()
+      var <- paste0("run_",j)
+      run_vars <- c(run_vars, var)
+      skeleton[, (var) := x2023_mht_cumulative_reset(get(j)), by=.(id)]
+      skeleton[get(var)==0, (var) := 999999999]
+    }
+
+    skeleton[, row_min := do.call(pmin, c(.SD, na.rm = TRUE)), .SDcols = run_vars]
+
     # combine them into the 'final' approach conclusion
     approach_name <- paste0("approach",i)
-    skeleton[, (approach_name) := "none"]
-
-    skeleton[, num_approaches := Reduce(`+`, .SD), .SDcol = unique(app$variable)]
+    skeleton[, (approach_name) := "local_or_none_mht"]
     for(j in unique(app$variable)){
-      skeleton[num_approaches==1 & get(j)==T, (approach_name) := j]
+      if(j=="local_or_none_mht") next()
+      var <- paste0("run_",j)
+      skeleton[get(var)==row_min & row_min != 999999999, (approach_name) := j]
     }
-    skeleton[num_approaches >= 2, (approach_name) := "multi"]
 
+    skeleton[, row_min := NULL]
+    for(j in run_vars) skeleton[, (j) := NULL]
     for(j in unique(app$variable)) skeleton[, (j) := NULL]
   }
-  skeleton[, num_approaches := NULL]
 }
 
 #' @export
@@ -223,6 +254,8 @@ x2023_mht_add_lmed <- function(skeleton, lmed){
   lmed <- lmed[P1193_LopNr_PersonNr %in% unique(skeleton$id)]
   message(Sys.time(), " LMED categorizing product names ")
   x2023_mht_lmed_categorize_product_names(lmed)
+  lmed[product_category=="E1", fddd := 1680] # IUDs
+
   message(Sys.time(), " LMED reducing size ")
   lmed <- lmed[!is.na(product_category)]
   lmed[, start_date := EDATUM]

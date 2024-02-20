@@ -1,77 +1,69 @@
+org::initialize_project(
+  env = .GlobalEnv,
+  home = c(
+    "~/Project Clark 2023 GAT Youth Descriptive/2023-gd-register-clark-gat-descriptives",
+    "~/epi-ai/2023-gd-register-clark-gat-descriptives"
+  ),
+  results = c(
+    "C:/Users/kricl384/Box/2023-gd-register-clark-gat-descriptives/results/",
+    "~/epi-ai/2023-gd-register-clark-gat-descriptives/results"
+  ),
+  data_raw = c(
+    "//argos.rudbeck.uu.se/MyGroups$/Bronze/Postdoc_Kristen/2023-gd-register-clark-gat-descriptives/data_raw",
+    "/data/argos/Bronze/Postdoc_Kristen/2023-gd-register-clark-gat-descriptives/data_raw"
+  ),
+  data_processed = c(
+    "//argos.rudbeck.uu.se/MyGroups$/Bronze/Postdoc_Kristen/2023-gd-register-clark-gat-descriptives/data_processed/",
+    "/data/argos/Bronze/Postdoc_Kristen/2023-gd-register-clark-gat-descriptives/data_processed/"
+  )
+)
+
+org::project$home
+org::project$results_today # save results here
+
+
+
+# load every single function (commands) into what is currently available in these named libraries
 library(data.table)
+library(ggplot2)
 library(magrittr)
 
-devtools::load_all(".")
-
-# mht
-folder <- "/data/argos/Bronze/Embla_data/_MHT/mht_raw/"
-id <- read.csv(
-  fs::path(folder, "scb/Individ_2007.csv"),
-  fileEncoding = "UTF-16"
+# get the correct ids/lopnr
+id <- haven::read_sas(
+  fs::path(org::project$data_raw, "SCB/fp_lev_fall_och_kontroller_1.sas7bdat")
 ) %>%
   setDT()
-ids <- id$P1163_LopNr_PersonNr[1:10000]
-rm("id")
+id
 
+ids_gd <- unique(id$lopnr_fall)
+
+# get parent data
+d_parent <- haven::read_sas(
+  fs::path(org::project$data_raw, "SCB/fp_lev_bioforaldrar.sas7bdat")
+) %>%
+  dplyr::filter(LopNr %in% ids_gd) %>%
+  setDT()
+
+ids_father <- d_parent$lopnrfar
+ids_mother <- d_parent$lopnrmor
+
+ids <- c(ids_gd, ids_father, ids_mother) %>%
+  unique() %>%
+  na.omit()
+
+# Initial setup----
+# create the initial skeleton
 skeleton <- swereg::create_skeleton(
   ids = ids,
-  date_min = "2007-01-01",
-  date_max = "2020-12-31"
+  date_min = "2006-01-01",
+  date_max = "2016-12-31"
 )
 
-lmed <- fread(
-  fs::path(folder, "sos", "T_T_R_LMED__12831_2021.txt"),
-  select = c(
-    "P1193_LopNr_PersonNr",
-    "EDATUM",
-    "ATC",
-    "produkt",
-    "fddd"
-  ))
-setnames(lmed, "ATC", "atc")
-lmed <- lmed[P1193_LopNr_PersonNr %in% ids]
-
-x2023_mht_add_lmed(skeleton, folder)
-gc()
-
-# add one-time information
-d <- haven::read_sas(
-  fs::path(folder, "SCB/demografi.sas7bdat")
-) %>%
-  dplyr::filter(lopnr %in% ids) %>%
-  setDT()
-
-swereg::add_onetime(
-  skeleton,
-  d,
-  id_name = "lopnr"
-)
-
-# add annual information
-isoyear <- 2001
-id_name <- "LopNr"
-
-d <- haven::read_sas(
-  fs::path(folder, "SCB/fp_lev_famtyp2001.sas7bdat")
-) %>%
-  dplyr::filter(LopNr %in% ids) %>%
-  setDT()
-
-swereg::add_annual(
-  skeleton,
-  d,
-  id_name = "LopNr",
-  isoyear = 2001
-)
-
-# add ICD-10 information
-# diagnoses and surgeries
-# outpatient
-ov <- haven::read_sas(file.path(folder, "Sos", "ov.sas7bdat")) %>%
+ov <- haven::read_sas(fs::path(org::project$data_raw, "Sos", "ov.sas7bdat")) %>%
   dplyr::filter(LopNr %in% ids) %>%
   setDT() # convert to data.table
 # inpatient
-sv <- haven::read_sas(file.path(folder, "Sos", "sv.sas7bdat")) %>%
+sv <- haven::read_sas(fs::path(org::project$data_raw, "Sos", "sv.sas7bdat")) %>%
   dplyr::filter(LopNr %in% ids) %>%
   setDT()
 diagnoses_and_operations <- rbindlist(list(ov, sv), use.names=T, fill=T) # put ov and sv on top of each other
@@ -114,7 +106,7 @@ swereg::add_diagnoses(
     "diag_bipolar" = c(
       "F3[01]", # ICD10
       "296[A-Z]", "!296[BX]", # ICD9
-      "^296,", "!296,00" # ICD8
+      "296,", "!296,00" # ICD8
     ),
 
     "diag_depression" = c(
@@ -176,83 +168,4 @@ swereg::add_diagnoses(
   )
 )
 
-swereg::add_operations(
-  skeleton,
-  diagnoses_and_operations,
-  id_name = "LopNr",
-  ops = list(
-    "op_afab_mastectomy"= c(
-      "HAC10",
-      "HAC20",
-      "HAC99",
-      "HAC15"
-    ),
-
-    "op_afab_breast_reconst_and_other_breast_ops" = c(
-      "HAD20",
-      "HAD30",
-      "HAD35",
-      "HAD99",
-      "HAE99"
-    ),
-
-    "op_afab_penis_test_prosth" = c(
-      "KFH50",
-      "KGV30",
-      "KGW96",
-      "KGH96"
-    ),
-
-    "op_afab_internal_genital" = c(
-      "LCD00",
-      "LCD01",
-      "LCD04",
-      "LCD10",
-      "LCD11",
-      "LCD96",
-      "LCD97"
-    ),
-
-    "op_afab_colpectomy" = c(
-      "LED00"
-    ),
-
-    "op_amab_breast_reconst_and_other_breast_ops" = c(
-      "HAD00",
-      "HAD10",
-      "HAD99",
-      "HAE00",
-      "HAE20",
-      "HAE99"
-    ),
-
-    "op_amab_reconst_vag" = c(
-      "LEE10",
-      "LEE40",
-      "LEE96",
-      "LFE10",
-      "LFE96"
-    ),
-
-    "op_amab_penis_amp" = c(
-      "KGC10"
-    ),
-
-    "op_amab_larynx" = c(
-      "DQD40"
-    )
-  )
-)
-
-rm("diagnoses_and_operations")
-
-skeleton
-
-xtabs(~skeleton$diag_gd_icd10_F64_089)
-for(i in stringr::str_subset(names(skeleton), "^op")) print(xtabs(~skeleton[[i]]))
-
-xtabs(~skeleton[is_isoyear==T]$icd10_F64_089)
-
-skeleton[is_isoyear==T & icd10_F64_089==T]
-
-
+sum(skeleton$diag_gd_icd89_transsexual)
