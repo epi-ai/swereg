@@ -254,7 +254,13 @@ x2023_mht_add_lmed <- function(skeleton, lmed){
   lmed <- lmed[P1193_LopNr_PersonNr %in% unique(skeleton$id)]
   message(Sys.time(), " LMED categorizing product names ")
   x2023_mht_lmed_categorize_product_names(lmed)
+
+  # fixing IUDS
   lmed[product_category=="E1", fddd := 1680] # IUDs
+  lmed[
+    stringr::str_detect(produkt, 'Jaydess'),
+    fddd := 1008
+  ]
 
   message(Sys.time(), " LMED reducing size ")
   lmed <- lmed[!is.na(product_category)]
