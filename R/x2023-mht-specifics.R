@@ -160,7 +160,7 @@ x2023_mht_apply_lmed_categories_to_skeleton <- function(skeleton, LMED){
       # identify all the women who received A1 in 2021-M01
       women_in_category_and_isoyearweek <- LMED_product[
         (start_isoyearweek <= x_isoyearweek & x_isoyearweek <= stop_isoyearweek)
-      ]$P1193_LopNr_PersonNr %>% unique()
+      ]$p1163_lopnr_personnr %>% unique()
 
       if(length(women_in_category_and_isoyearweek)==0) next()
       # assign A1:=TRUE for all the women we found above, in 2021-M01
@@ -251,7 +251,7 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
 x2023_mht_add_lmed <- function(skeleton, lmed){
   message(Sys.time(), " LMED loading")
   message(Sys.time(), " LMED restricting")
-  lmed <- lmed[p1193_lopnr_personnr %in% unique(skeleton$id)]
+  lmed <- lmed[p1163_lopnr_personnr %in% unique(skeleton$id)]
   message(Sys.time(), " LMED categorizing product names ")
   x2023_mht_lmed_categorize_product_names(lmed)
 
