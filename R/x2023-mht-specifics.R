@@ -251,7 +251,7 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
 x2023_mht_add_lmed <- function(skeleton, lmed){
   message(Sys.time(), " LMED loading")
   message(Sys.time(), " LMED restricting")
-  lmed <- lmed[P1193_LopNr_PersonNr %in% unique(skeleton$id)]
+  lmed <- lmed[p1193_lopnr_personnr %in% unique(skeleton$id)]
   message(Sys.time(), " LMED categorizing product names ")
   x2023_mht_lmed_categorize_product_names(lmed)
 
@@ -264,8 +264,8 @@ x2023_mht_add_lmed <- function(skeleton, lmed){
 
   message(Sys.time(), " LMED reducing size ")
   lmed <- lmed[!is.na(product_category)]
-  lmed[, start_date := EDATUM]
-  lmed[, stop_date := EDATUM + round(fddd)]
+  lmed[, start_date := edatum]
+  lmed[, stop_date := edatum + round(fddd)]
   message(Sys.time(), " LMED start/stop ")
   lmed[, start_isoyearweek := cstime::date_to_isoyearweek_c(start_date)]
   lmed[, stop_isoyearweek :=  cstime::date_to_isoyearweek_c(stop_date)]

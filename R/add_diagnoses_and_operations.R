@@ -131,26 +131,26 @@ add_diagnoses_or_operations_or_cods <- function(
       stringr::str_subset(names(dataset), "^EKOD"),
       stringr::str_subset(names(dataset), "^ICDO10")
     )
-    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(INDATUM)]
+    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(indatum)]
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
-    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(INDATUM),"-**")]
+    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(indatum),"-**")]
 
   } else if(type == "ops") {
     variables_containing_codes <- c(
       stringr::str_subset(names(dataset), "^OP"),
       stringr::str_subset(names(dataset), "^op")
     )
-    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(INDATUM)]
+    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(indatum)]
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
-    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(INDATUM),"-**")]
+    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(indatum),"-**")]
   } else if(type == "cods") {
     variables_containing_codes <- c(
       stringr::str_subset(names(dataset), "^MORSAK"),
       stringr::str_subset(names(dataset), "^morsak")
     )
-    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(DODSDAT)]
+    dataset[, isoyearweek := cstime::date_to_isoyearweek_c(dodsdat)]
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
-    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(DODSDAT),"-**")]
+    dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(dodsdat),"-**")]
   } else stop("")
 
   for(i in seq_along(diags_or_ops_or_cods)){
