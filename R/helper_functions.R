@@ -27,3 +27,8 @@ first_non_na <- function(x){
   dplyr::first(na.omit(x))
 }
 
+#' @export
+last_non_na <- function(x){
+  dplyr::last(na.omit(x))
+}
+
