@@ -189,7 +189,7 @@ x2023_mht_cumulative_reset <- function(x) {
 x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
   # approaches
   data_approach <- readxl::read_excel(
-    system.file("2023-mht", "dataDictionary20230526.xlsx", package = "swereg"),
+    system.file("2023-mht", "dataDictionary20240620.xlsx", package = "swereg"),
     sheet = "post_grouping"
   )
   setDT(data_approach)
