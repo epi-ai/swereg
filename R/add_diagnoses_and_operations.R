@@ -5,18 +5,22 @@ add_cods <- function(
     skeleton,
     dataset,
     id_name,
+    cod_type = "both",
     cods = list(
       "icd10_F64_0" = c("^F640"),
       "icd10_F64_89" = c("^F6489"),
       "icd10_F64_089" = c("^F640", "^F648", "^F649")
     )
 ){
+
+  stopifnot(cod_type %in% c("both", "underlying", "multiple"))
   add_diagnoses_or_operations_or_cods(
     skeleton = skeleton,
     dataset = dataset,
     id_name = id_name,
     diags_or_ops_or_cods = cods,
-    type = "cods"
+    type = "cods",
+    cod_type = cod_type
   )
 }
 
@@ -119,7 +123,8 @@ add_diagnoses_or_operations_or_cods <- function(
     dataset,
     id_name,
     diags_or_ops_or_cods,
-    type
+    type,
+    cod_type = NULL
 ){
   stopifnot(type %in% c("diags", "ops", "cods"))
 
@@ -144,10 +149,23 @@ add_diagnoses_or_operations_or_cods <- function(
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
     dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(indatum),"-**")]
   } else if(type == "cods") {
-    variables_containing_codes <- c(
+    variables_containing_codes_multiple <- c(
       stringr::str_subset(names(dataset), "^MORSAK"),
       stringr::str_subset(names(dataset), "^morsak")
     )
+    variables_containing_codes_underlying <- c(
+      stringr::str_subset(names(dataset), "^ULORSAK"),
+      stringr::str_subset(names(dataset), "^ulorsak")
+    )
+    if(cod_type == "both"){
+      variables_containing_codes <- c(variables_containing_codes_multiple, variables_containing_codes_underlying)
+    } else if(cod_type == "underlying"){
+      variables_containing_codes <- c(variables_containing_codes_underlying)
+    } else if(cod_type == "multiple"){
+      variables_containing_codes <- c(variables_containing_codes_multiple)
+    } else {
+      stop("invalid cod_type")
+    }
     dataset[, isoyearweek := cstime::date_to_isoyearweek_c(dodsdat)]
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
     dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(dodsdat),"-**")]

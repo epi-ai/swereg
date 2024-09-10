@@ -8,6 +8,7 @@ add_cods(
   skeleton,
   dataset,
   id_name,
+  cod_type = "both",
   cods = list(icd10_F64_0 = c("^F640"), icd10_F64_89 = c("^F6489"), icd10_F64_089 =
     c("^F640", "^F648", "^F649"))
 )
