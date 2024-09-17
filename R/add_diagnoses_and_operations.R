@@ -31,18 +31,22 @@ add_diagnoses <- function(
     skeleton,
     dataset,
     id_name,
+    diag_type = "both",
     diags = list(
       "icd10_F64_0" = c("^F640"),
       "icd10_F64_89" = c("^F6489"),
       "icd10_F64_089" = c("^F640", "^F648", "^F649")
     )
 ){
+  stopifnot(cod_type %in% c("both", "main"))
+
   add_diagnoses_or_operations_or_cods(
     skeleton = skeleton,
     dataset = dataset,
     id_name = id_name,
     diags_or_ops_or_cods = diags,
-    type = "diags"
+    type = "diags",
+    diag_type = diag_type
   )
 }
 
@@ -124,21 +128,35 @@ add_diagnoses_or_operations_or_cods <- function(
     id_name,
     diags_or_ops_or_cods,
     type,
-    cod_type = NULL
+    cod_type = NULL,
+    diag_type = NULL
 ){
   stopifnot(type %in% c("diags", "ops", "cods"))
 
   if(type == "diags"){
-    variables_containing_codes <- c(
-      stringr::str_subset(names(dataset), "^HDIA"),
-      stringr::str_subset(names(dataset), "^hdia"),
-      stringr::str_subset(names(dataset), "^DIA"),
-      stringr::str_subset(names(dataset), "^dia"),
-      stringr::str_subset(names(dataset), "^EKOD"),
-      stringr::str_subset(names(dataset), "^ekod"),
-      stringr::str_subset(names(dataset), "^ICDO10"),
-      stringr::str_subset(names(dataset), "^icdo10")
-    )
+    if(diag_type == "both"){
+      variables_containing_codes <- c(
+        stringr::str_subset(names(dataset), "^HDIA"),
+        stringr::str_subset(names(dataset), "^hdia"),
+
+        stringr::str_subset(names(dataset), "^DIA"),
+        stringr::str_subset(names(dataset), "^dia"),
+
+        stringr::str_subset(names(dataset), "^EKOD"),
+        stringr::str_subset(names(dataset), "^ekod"),
+
+        stringr::str_subset(names(dataset), "^ICDO10"),
+        stringr::str_subset(names(dataset), "^icdo10")
+      )
+    } else if(diag_type=="main"){
+      variables_containing_codes <- c(
+        stringr::str_subset(names(dataset), "^HDIA"),
+        stringr::str_subset(names(dataset), "^hdia")
+      )
+    } else {
+      stop("invalid diag_type")
+    }
+
     dataset[, isoyearweek := cstime::date_to_isoyearweek_c(indatum)]
     min_isoyearweek <- min(skeleton[is_isoyear==FALSE]$isoyearweek)
     dataset[isoyearweek<min_isoyearweek, isoyearweek := paste0(cstime::date_to_isoyear_c(indatum),"-**")]

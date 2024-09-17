@@ -2,11 +2,11 @@ org::initialize_project(
   env = .GlobalEnv,
   home = c(
     "~/Project Clark 2023 GAT Youth Descriptive/2023-gd-register-clark-gat-descriptives",
-    "~/epi-ai/2023-gd-register-clark-gat-descriptives"
+    "~/papadopoulos-lab/2023-gd-register-clark-gat-descriptives"
   ),
   results = c(
     "C:/Users/kricl384/Box/2023-gd-register-clark-gat-descriptives/results/",
-    "~/epi-ai/2023-gd-register-clark-gat-descriptives/results"
+    "~/papadopoulos-lab/2023-gd-register-clark-gat-descriptives/results"
   ),
   data_raw = c(
     "//argos.rudbeck.uu.se/MyGroups$/Bronze/Postdoc_Kristen/2023-gd-register-clark-gat-descriptives/data_raw",
@@ -169,3 +169,16 @@ swereg::add_diagnoses(
 )
 
 sum(skeleton$diag_gd_icd89_transsexual)
+
+
+diagnoses_and_operations[, gd_hdia := HDIA %in% c("F640", "F648", "F649")]
+diagnoses_and_operations[, gd_not_hdia := !HDIA %in% c("F640", "F648", "F649") & DIA1 %in% c("F640", "F648", "F649")]
+
+setorder(diagnoses_and_operations, LopNr, INDATUMA)
+
+diagnoses_and_operations <- diagnoses_and_operations[gd_hdia==TRUE | gd_not_hdia == T]
+
+diagnoses_and_operations[, row := 1:.N, by = .(LopNr)]
+diagnoses_and_operations[row>1, row := 2]
+
+diagnoses_and_operations[row==1, .(mean(gd_hdia), mean(gd_not_hdia))]
