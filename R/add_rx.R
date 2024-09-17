@@ -30,10 +30,11 @@ add_rx <- function(
         # identify all the women who received A1 in 2021-M01
         women_in_category_and_isoyearweek <- lmed_atc[
           (start_isoyearweek <= x_isoyearweek & x_isoyearweek <= stop_isoyearweek)
-        ][[id_name]] %>% unique()
+        ]
 
         # assign A1:=TRUE for all the women we found above, in 2021-M01
-        if(length(women_in_category_and_isoyearweek) > 0){
+        if(nrow(women_in_category_and_isoyearweek) > 0){
+          women_in_category_and_isoyearweek <- women_in_category_and_isoyearweek[[id_name]] %>% unique()
           skeleton[
             .(women_in_category_and_isoyearweek, x_isoyearweek),
             (rx) := TRUE
