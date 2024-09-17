@@ -38,7 +38,7 @@ add_diagnoses <- function(
       "icd10_F64_089" = c("^F640", "^F648", "^F649")
     )
 ){
-  stopifnot(cod_type %in% c("both", "main"))
+  stopifnot(diag_type %in% c("both", "main"))
 
   add_diagnoses_or_operations_or_cods(
     skeleton = skeleton,
