@@ -14,6 +14,15 @@ add_cods <- function(
 ){
 
   stopifnot(cod_type %in% c("both", "underlying", "multiple"))
+  # if dodsdat is a character
+  # -> replace missing months with 0701
+  # -> replace missing days with 15
+  # -> turn into date
+  if(inherits(dataset$dodsdat, "character")){
+    d[, dodsdat := stringr::str_replace(dodsdat, "0000$", "0701")]
+    d[, dodsdat := stringr::str_replace(dodsdat, "00$", "15")]
+    d[, dodsdat := lubridate::ymd(dodsdat)]
+  }
   add_diagnoses_or_operations_or_cods(
     skeleton = skeleton,
     dataset = dataset,
