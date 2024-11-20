@@ -34,6 +34,7 @@ create_skeleton <- function(
   skeleton_isoyearweek[, is_isoyear := FALSE]
 
   skeleton <- rbindlist(list(skeleton_isoyear, skeleton_isoyearweek), use.names=T)
+  # skeleton[, isoyearweeksun := cstime::isoyearweek_to_last_date(isoyearweek)]
 
   setcolorder(skeleton, c("id", "isoyear", "isoyearweek", "is_isoyear"))
   setorder(skeleton, id, isoyearweek)

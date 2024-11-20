@@ -189,7 +189,7 @@ x2023_mht_cumulative_reset <- function(x) {
 x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
   # approaches
   data_approach <- readxl::read_excel(
-    system.file("2023-mht", "dataDictionary20241008.xlsx", package = "swereg"),
+    system.file("2023-mht", "dataDictionary20241105.xlsx", package = "swereg"),
     sheet = "post_grouping"
   )
   setDT(data_approach)
@@ -256,11 +256,32 @@ x2023_mht_add_lmed <- function(skeleton, lmed){
   x2023_mht_lmed_categorize_product_names(lmed)
 
   # fixing IUDS
+  lmed[product_category=="D3", fddd := 1680] # IUDs
   lmed[product_category=="E1", fddd := 1680] # IUDs
   lmed[
     stringr::str_detect(produkt, 'Jaydess'),
     fddd := 1008
   ]
+
+  # fixing FDDDs
+  fixes <- readxl::read_excel(
+    system.file("2023-mht", "dataDictionary20241105.xlsx", package = "swereg"),
+    sheet = "MHT_groups"
+  )
+  setDT(fixes)
+  fixes <- fixes[!is.na(minimum_monthly_dose)]
+  for(i in 1:nrow(fixes)){
+    x_produkt <- fixes$Preparatnamn[i]
+    minimum_monthly_dose <- fixes$minimum_monthly_dose[i]
+    minimum_months <- fixes$minimum_months[i]
+
+    lmed[
+      stringr::str_detect(produkt, x_produkt),
+      fddd := fifelse(
+        floor(fddd/minimum_monthly_dose) < minimum_months, 0, floor(fddd/minimum_monthly_dose)*28
+      )
+    ]
+  }
 
   message(Sys.time(), " LMED reducing size ")
   lmed <- lmed[!is.na(product_category)]
