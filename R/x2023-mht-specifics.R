@@ -1,139 +1,157 @@
 x2023_mht_lmed_categorize_product_names <- function(x){
+  x[, produkt_clean := stringr::str_remove_all(produkt,"-")]
+  x[, produkt_clean := stringr::str_remove_all(produkt," ")]
   x[, product_category := fcase(
-        stringr::str_detect(produkt, 'Oestring') , 'A3',
-        stringr::str_detect(produkt, 'Vagidonna') , 'A3',
-        stringr::str_detect(produkt, 'Vagifem') , 'A3',
-        stringr::str_detect(produkt, 'Vagirux') , 'A3',
+    stringr::str_detect(produkt_clean, 'Oestring') , 'A3',
+    stringr::str_detect(produkt_clean, 'Vagidonna') , 'A3',
+    stringr::str_detect(produkt_clean, 'Vagifem') , 'A3',
+    stringr::str_detect(produkt_clean, 'Vagirux') , 'A3',
+    stringr::str_detect(produkt_clean, 'EstradiolSUN') , 'A3',
+    stringr::str_detect(produkt_clean, 'Menovag') , 'A3',
+    
 
+    
+    stringr::str_detect(produkt_clean, 'Blissel') , 'A4',
+    stringr::str_detect(produkt_clean, 'Estrokad') , 'A4',
+    stringr::str_detect(produkt_clean, 'Ovesterin') , 'A4',
+    stringr::str_detect(produkt_clean, 'Gelistrol') , 'A4',
+    
+    stringr::str_detect(produkt_clean, 'Divigel') , 'A1',
+    stringr::str_detect(produkt_clean, 'Estradot') , 'A1',
+    stringr::str_detect(produkt_clean, 'Estrogel') , 'A1',
+    stringr::str_detect(produkt_clean, 'Lenzetto') , 'A1',
+    stringr::str_detect(produkt_clean, 'Dermestril') , 'A1',
+    
+    stringr::str_detect(produkt_clean, 'Evorel') , 'A1',
+    stringr::str_detect(produkt_clean, 'Oesclim') , 'A1',
+    stringr::str_detect(produkt_clean, 'Climara') , 'A1',
+    stringr::str_detect(produkt_clean, 'Evopad') , 'A1',
+    stringr::str_detect(produkt_clean, 'Femseven') , 'A1',
+    
+    stringr::str_detect(produkt_clean, 'Progynon') , 'A2',
+    stringr::str_detect(produkt_clean, 'Femanest') , 'A2',
+    
+    
+    stringr::str_detect(produkt_clean, 'Oestriolaspen') , 'A5',
+    stringr::str_detect(produkt_clean, 'Premarina') , 'A6',
+    stringr::str_detect(produkt_clean, 'Presomen') , 'A6',
+    
+    stringr::str_detect(produkt_clean, 'Delestrogen') , 'A7',
+    stringr::str_detect(produkt_clean, 'Neofollin') , 'A7',
+    
+    
+    stringr::str_detect(produkt_clean, 'Estalis') , 'B1',
+    stringr::str_detect(produkt_clean, 'EstalisSekvens') , 'B1',
+    
+    stringr::str_detect(produkt_clean, 'Activelle') , 'B2',
+    stringr::str_detect(produkt_clean, 'Cliovelle') , 'B2',
+    stringr::str_detect(produkt_clean, 'Eviana') , 'B2',
+    stringr::str_detect(produkt_clean, 'Femanor') , 'B2',
+    stringr::str_detect(produkt_clean, 'Noresmea') , 'B2',
+    stringr::str_detect(produkt_clean, 'Kliogest') , 'B2',
+    
+    
+    
+    stringr::str_detect(produkt_clean, 'Indivina') , 'B3',
+    stringr::str_detect(produkt_clean, 'Duova') , 'B3',
+    stringr::str_detect(produkt_clean, 'Premelle') , 'B3',
+    stringr::str_detect(produkt_clean, 'Premellesekvens') , 'B3',
+    
+    
+    stringr::str_detect(produkt_clean, 'Femostonconti') , 'B4',
+    
+    stringr::str_detect(produkt_clean, 'Climodien') , 'B5',
+    
+    stringr::str_detect(produkt_clean, 'Angemin') , 'B6',
+    
+    stringr::str_detect(produkt_clean, 'Sequidot') , 'B7',
+    
+    stringr::str_detect(produkt_clean, 'Femasekvens') , 'B8',
+    stringr::str_detect(produkt_clean, 'Trisekvens') , 'B8',
+    stringr::str_detect(produkt_clean, 'Novofem') , 'B8',
+    
+    stringr::str_detect(produkt_clean, 'DivinaPlus') , 'B9',
+    stringr::str_detect(produkt_clean, 'Trivina') , 'B9',
+    
+    stringr::str_detect(produkt_clean, 'Presomen') , 'B10',
+    
+    
+    stringr::str_detect(produkt_clean, 'Femoston') , 'B11',
+    
+    
+    stringr::str_detect(produkt_clean, 'Cyclabil') , 'B11'
+    
+    ,
+    stringr::str_detect(produkt_clean, 'Crinone') , 'C1',
+    stringr::str_detect(produkt_clean, 'Cyclogest') , 'C1',
+    stringr::str_detect(produkt_clean, 'Lugesteron') , 'C1',
+    stringr::str_detect(produkt_clean, 'Lutinus') , 'C1',
+    stringr::str_detect(produkt_clean, 'Utrogest') , 'C1',
+    stringr::str_detect(produkt_clean, 'Utrogestan') , 'C1',
+    stringr::str_detect(produkt_clean, 'Progesteron') , 'C1',
+    stringr::str_detect(produkt_clean, 'Extemporeprogesteron') , 'C1',
+    stringr::str_detect(produkt_clean, 'ProgesteronMICAPL') , 'C1',
+    
+    stringr::str_detect(produkt_clean, 'Prolutex') , 'C1',
+    
+    
+    
+    stringr::str_detect(produkt_clean, 'Visanne') , 'C3',
+    stringr::str_detect(produkt_clean, 'Desogestrel') , 'C3',
+    stringr::str_detect(produkt_clean, 'Cerazette') , 'C3',
+    stringr::str_detect(produkt_clean, 'Azalia') , 'C3',
+    stringr::str_detect(produkt_clean, 'Gestrina') , 'C3',
+    stringr::str_detect(produkt_clean, 'Velavel') , 'C3',
+    stringr::str_detect(produkt_clean, 'Vinelle') , 'C3',
+    stringr::str_detect(produkt_clean, 'Zarelle') , 'C3',
+    stringr::str_detect(produkt_clean, 'Slinda') , 'C3',
+    
+    stringr::str_detect(produkt_clean, 'PrimolutNor') , 'C4',
+    stringr::str_detect(produkt_clean, 'Provera') , 'C4',
+    stringr::str_detect(produkt_clean, 'Duphaston') , 'C4',
+    stringr::str_detect(produkt_clean, 'Orgametril') , 'C4',
+    stringr::str_detect(produkt_clean, 'Gestapuran') , 'C4',
+    stringr::str_detect(produkt_clean, 'Duphaston') , 'C5',
+    
+    stringr::str_detect(produkt_clean, 'DepoProvera') , 'D1',
+    stringr::str_detect(produkt_clean, 'Nexplanon') , 'D2',
+    stringr::str_detect(produkt_clean, 'Implanon') , 'D2',
+    stringr::str_detect(produkt_clean, 'Folistrel') , 'D2',
+    stringr::str_detect(produkt_clean, 'Jadelle') , 'D3',
+    
 
-        stringr::str_detect(produkt, 'Blissel') , 'A4',
-        stringr::str_detect(produkt, 'Estrokad') , 'A4',
-        stringr::str_detect(produkt, 'Ovesterin') , 'A4',
-        stringr::str_detect(produkt, 'Gelistrol') , 'A4',
-
-        stringr::str_detect(produkt, 'Divigel') , 'A1',
-        stringr::str_detect(produkt, 'Estradot') , 'A1',
-        stringr::str_detect(produkt, 'Estrogel') , 'A1',
-        stringr::str_detect(produkt, 'Lenzetto') , 'A1',
-        stringr::str_detect(produkt, 'Evorel') , 'A1',
-        stringr::str_detect(produkt, 'Oesclim') , 'A1',
-        stringr::str_detect(produkt, 'Climara') , 'A1',
-        stringr::str_detect(produkt, 'Evopad') , 'A1',
-        stringr::str_detect(produkt, 'FemSeven') , 'A1',
-
-        stringr::str_detect(produkt, 'Progynon') , 'A2',
-        stringr::str_detect(produkt, 'Femanest') , 'A2',
-
-
-        stringr::str_detect(produkt, 'Oestriol') , 'A5',
-        stringr::str_detect(produkt, 'Premarina') , 'A6',
-        stringr::str_detect(produkt, 'Delestrogen') , 'A7',
-        stringr::str_detect(produkt, 'Neofollin') , 'A7',
-
-
-        stringr::str_detect(produkt, 'Estalis') , 'B1',
-        stringr::str_detect(produkt, 'Estalis Sekvens') , 'B1',
-
-        stringr::str_detect(produkt, 'Activelle') , 'B2',
-        stringr::str_detect(produkt, 'Cliovelle') , 'B2',
-        stringr::str_detect(produkt, 'Eviana') , 'B2',
-        stringr::str_detect(produkt, 'Femanor') , 'B2',
-        stringr::str_detect(produkt, 'Evorel') , 'B2',
-        stringr::str_detect(produkt, 'Noresmea') , 'B2',
-        stringr::str_detect(produkt, 'Kliogest') , 'B2',
-
-
-
-        stringr::str_detect(produkt, 'Indivina') , 'B3',
-        stringr::str_detect(produkt, 'Duova') , 'B3',
-        stringr::str_detect(produkt, 'Premelle') , 'B3',
-        stringr::str_detect(produkt, 'Premelle sekvens') , 'B3',
-
-
-        stringr::str_detect(produkt, 'Femostonconti') , 'B4',
-
-        stringr::str_detect(produkt, 'Climodien') , 'B5',
-
-        stringr::str_detect(produkt, 'Angemin') , 'B6',
-
-        stringr::str_detect(produkt, 'Sequidot') , 'B7',
-
-        stringr::str_detect(produkt, 'Femasekvens') , 'B8',
-        stringr::str_detect(produkt, 'Trisekvens') , 'B8',
-        stringr::str_detect(produkt, 'Novofem') , 'B8',
-
-        stringr::str_detect(produkt, 'Divina') , 'B9',
-        stringr::str_detect(produkt, 'Trivina') , 'B9',
-
-
-        stringr::str_detect(produkt, 'Femoston') , 'B11',
-
-
-        stringr::str_detect(produkt, 'Cyclabil') , 'B11'
-
-        ,
-        stringr::str_detect(produkt, 'Crinone') , 'C1',
-        stringr::str_detect(produkt, 'Cyclogest') , 'C1',
-        stringr::str_detect(produkt, 'Lugesteron') , 'C1',
-        stringr::str_detect(produkt, 'Lutinus') , 'C1',
-        stringr::str_detect(produkt, 'Utrogest') , 'C1',
-        stringr::str_detect(produkt, 'Utrogestan') , 'C1',
-        stringr::str_detect(produkt, 'Progesteron') , 'C1',
-        stringr::str_detect(produkt, 'Extempore') , 'C1',
-
-
-
-        stringr::str_detect(produkt, 'Visanne') , 'C3',
-        stringr::str_detect(produkt, 'Desogestrel') , 'C3',
-        stringr::str_detect(produkt, 'Cerazette') , 'C3',
-        stringr::str_detect(produkt, 'Azalia') , 'C3',
-        stringr::str_detect(produkt, 'Gestrina') , 'C3',
-        stringr::str_detect(produkt, 'Velavel') , 'C3',
-        stringr::str_detect(produkt, 'Vinelle') , 'C3',
-        stringr::str_detect(produkt, 'Zarelle') , 'C3',
-        stringr::str_detect(produkt, 'Slinda') , 'C3',
-
-        stringr::str_detect(produkt, 'Primolut') , 'C4',
-        stringr::str_detect(produkt, '^Provera') , 'C4',
-        stringr::str_detect(produkt, 'Duphaston') , 'C4',
-        stringr::str_detect(produkt, 'Orgametril') , 'C4',
-        stringr::str_detect(produkt, 'Gestapuran') , 'C4',
-        stringr::str_detect(produkt, 'Duphaston') , 'C5',
-
-        stringr::str_detect(produkt, '^Depo-Provera') , 'D1',
-        stringr::str_detect(produkt, '^Depo-Progevera') , 'D1',
-        stringr::str_detect(produkt, 'Nexplanon') , 'D2',
-        stringr::str_detect(produkt, 'Implanon') , 'D2',
-        stringr::str_detect(produkt, 'Follistrel') , 'D2',
-        stringr::str_detect(produkt, 'Jadelle') , 'D3',
-
-        stringr::str_detect(produkt, 'Mini-Pe') , 'D4',
-        stringr::str_detect(produkt, 'Exlutena') , 'D5',
-        stringr::str_detect(produkt, 'Jaydess') , 'E1',
-        stringr::str_detect(produkt, 'Kyleena') , 'E1',
-        stringr::str_detect(produkt, 'Mirena') , 'E1',
-        stringr::str_detect(produkt, 'Livial') , 'F1',
-        stringr::str_detect(produkt, 'Tibelia') , 'F1',
-        stringr::str_detect(produkt, 'Tibocina') , 'F1',
-        stringr::str_detect(produkt, 'Tibolon Aristo') , 'F1',
-        stringr::str_detect(produkt, 'Tibolon Mylan') , 'F1',
-
-        stringr::str_detect(produkt, 'Tibolon Orifarm') , 'F1',
-        stringr::str_detect(produkt, 'Boltin') , 'F1',
-        stringr::str_detect(produkt, 'Duavive') , 'G1',
-
-        stringr::str_detect(produkt, 'Nebido') , 'H1',
-        stringr::str_detect(produkt, 'Testogel') , 'H1',
-        stringr::str_detect(produkt, 'Undestor') , 'H1',
-        stringr::str_detect(produkt, 'Testoviron-Depot-250') , 'H1',
-        stringr::str_detect(produkt, 'Intrinsa') , 'H1',
-        stringr::str_detect(produkt, 'Testavan') , 'H1',
-        stringr::str_detect(produkt, 'Testim') , 'H1',
-        stringr::str_detect(produkt, 'Testoviron Depot') , 'H1',
-        stringr::str_detect(produkt, 'Testoviron') , 'H1',
-        stringr::str_detect(produkt, 'Tostran') , 'H1',
-        stringr::str_detect(produkt, 'Tostrex') , 'H1'
-    )
+    stringr::str_detect(produkt_clean, 'Jaydess') , 'E1',
+    stringr::str_detect(produkt_clean, 'Kyleena') , 'E1',
+    stringr::str_detect(produkt_clean, 'Levosert') , 'E1',
+    stringr::str_detect(produkt_clean, 'Levosertone') , 'E1',
+    stringr::str_detect(produkt_clean, 'Mirena') , 'E1',
+    
+    stringr::str_detect(produkt_clean, 'Livial') , 'F1',
+    stringr::str_detect(produkt_clean, 'Tibelia') , 'F1',
+    stringr::str_detect(produkt_clean, 'Tibocina') , 'F1',
+    stringr::str_detect(produkt_clean, 'TibolonAristo') , 'F1',
+    stringr::str_detect(produkt_clean, 'TibolonMylan') , 'F1',
+    
+    stringr::str_detect(produkt_clean, 'TibolonOrifarm') , 'F1',
+    stringr::str_detect(produkt_clean, 'Boltin') , 'F1',
+    stringr::str_detect(produkt_clean, 'Duavive') , 'G1',
+    
+    stringr::str_detect(produkt_clean, 'Nebido') , 'H1',
+    stringr::str_detect(produkt_clean, 'Testogel') , 'H1',
+    stringr::str_detect(produkt_clean, 'Undestor') , 'H1',
+    stringr::str_detect(produkt_clean, 'Undestortestocaps') , 'H1',
+    stringr::str_detect(produkt_clean, 'Testovirondepot') , 'H1',
+    stringr::str_detect(produkt_clean, 'Intrinsa') , 'H1',
+    stringr::str_detect(produkt_clean, 'Testavan') , 'H1',
+    stringr::str_detect(produkt_clean, 'Testim') , 'H1',
+    stringr::str_detect(produkt_clean, 'Testovirondepot') , 'H1',
+    stringr::str_detect(produkt_clean, 'Tostran') , 'H1',
+    stringr::str_detect(produkt_clean, 'Tostrex') , 'H1',
+    
+    stringr::str_detect(produkt_clean, 'MiniPe') , 'I1',
+    stringr::str_detect(produkt_clean, 'Exlutena') , 'I2'
+    
+  )
   ]
 }
 
