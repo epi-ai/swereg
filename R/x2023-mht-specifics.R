@@ -235,11 +235,15 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
     # combine them into the 'final' approach conclusion
     approach_name <- paste0("approach",i)
     skeleton[, (approach_name) := "local_or_none_mht"]
+    skeleton[, num_of_approaches_at_row_min := 0]
     for(j in unique(app$variable)){
       if(j=="local_or_none_mht") next()
       var <- paste0("run_",j)
       skeleton[get(var)==row_min & row_min != 999999999, (approach_name) := j]
+      skeleton[get(var)==row_min & row_min != 999999999, num_of_approaches_at_row_min := num_of_approaches_at_row_min + 1]
     }
+    skeleton[num_of_approaches_at_row_min>1, (approach_name) := "clashingprescriptions"]
+    skeleton[, num_of_approaches_at_row_min := NULL]
 
     skeleton[, row_min := NULL]
     for(j in run_vars) skeleton[, (j) := NULL]
