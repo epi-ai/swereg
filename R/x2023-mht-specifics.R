@@ -8,79 +8,79 @@ x2023_mht_lmed_categorize_product_names <- function(x){
     stringr::str_detect(produkt_clean, 'Vagirux') , 'A3',
     stringr::str_detect(produkt_clean, 'EstradiolSUN') , 'A3',
     stringr::str_detect(produkt_clean, 'Menovag') , 'A3',
-    
 
-    
+
+
     stringr::str_detect(produkt_clean, 'Blissel') , 'A4',
     stringr::str_detect(produkt_clean, 'Estrokad') , 'A4',
     stringr::str_detect(produkt_clean, 'Ovesterin') , 'A4',
     stringr::str_detect(produkt_clean, 'Gelistrol') , 'A4',
-    
+
     stringr::str_detect(produkt_clean, 'Divigel') , 'A1',
     stringr::str_detect(produkt_clean, 'Estradot') , 'A1',
     stringr::str_detect(produkt_clean, 'Estrogel') , 'A1',
     stringr::str_detect(produkt_clean, 'Lenzetto') , 'A1',
     stringr::str_detect(produkt_clean, 'Dermestril') , 'A1',
-    
+
     stringr::str_detect(produkt_clean, 'Evorel') , 'A1',
     stringr::str_detect(produkt_clean, 'Oesclim') , 'A1',
     stringr::str_detect(produkt_clean, 'Climara') , 'A1',
     stringr::str_detect(produkt_clean, 'Evopad') , 'A1',
     stringr::str_detect(produkt_clean, 'Femseven') , 'A1',
-    
+
     stringr::str_detect(produkt_clean, 'Progynon') , 'A2',
     stringr::str_detect(produkt_clean, 'Femanest') , 'A2',
-    
-    
+
+
     stringr::str_detect(produkt_clean, 'Oestriolaspen') , 'A5',
     stringr::str_detect(produkt_clean, 'Premarina') , 'A6',
     stringr::str_detect(produkt_clean, 'Presomen') , 'A6',
-    
+
     stringr::str_detect(produkt_clean, 'Delestrogen') , 'A7',
     stringr::str_detect(produkt_clean, 'Neofollin') , 'A7',
-    
-    
+
+
     stringr::str_detect(produkt_clean, 'Estalis') , 'B1',
     stringr::str_detect(produkt_clean, 'EstalisSekvens') , 'B1',
-    
+
     stringr::str_detect(produkt_clean, 'Activelle') , 'B2',
     stringr::str_detect(produkt_clean, 'Cliovelle') , 'B2',
     stringr::str_detect(produkt_clean, 'Eviana') , 'B2',
     stringr::str_detect(produkt_clean, 'Femanor') , 'B2',
     stringr::str_detect(produkt_clean, 'Noresmea') , 'B2',
     stringr::str_detect(produkt_clean, 'Kliogest') , 'B2',
-    
-    
-    
+
+
+
     stringr::str_detect(produkt_clean, 'Indivina') , 'B3',
     stringr::str_detect(produkt_clean, 'Duova') , 'B3',
     stringr::str_detect(produkt_clean, 'Premelle') , 'B3',
     stringr::str_detect(produkt_clean, 'Premellesekvens') , 'B3',
-    
-    
+
+
     stringr::str_detect(produkt_clean, 'Femostonconti') , 'B4',
-    
+
     stringr::str_detect(produkt_clean, 'Climodien') , 'B5',
-    
+
     stringr::str_detect(produkt_clean, 'Angemin') , 'B6',
-    
+
     stringr::str_detect(produkt_clean, 'Sequidot') , 'B7',
-    
+
     stringr::str_detect(produkt_clean, 'Femasekvens') , 'B8',
     stringr::str_detect(produkt_clean, 'Trisekvens') , 'B8',
     stringr::str_detect(produkt_clean, 'Novofem') , 'B8',
-    
+
     stringr::str_detect(produkt_clean, 'DivinaPlus') , 'B9',
     stringr::str_detect(produkt_clean, 'Trivina') , 'B9',
-    
+
     stringr::str_detect(produkt_clean, 'Presomen') , 'B10',
-    
-    
+
+
     stringr::str_detect(produkt_clean, 'Femoston') , 'B11',
-    
-    
+
+
     stringr::str_detect(produkt_clean, 'Cyclabil') , 'B11'
-    
+
     ,
     stringr::str_detect(produkt_clean, 'Crinone') , 'C1',
     stringr::str_detect(produkt_clean, 'Cyclogest') , 'C1',
@@ -91,11 +91,11 @@ x2023_mht_lmed_categorize_product_names <- function(x){
     stringr::str_detect(produkt_clean, 'Progesteron') , 'C1',
     stringr::str_detect(produkt_clean, 'Extemporeprogesteron') , 'C1',
     stringr::str_detect(produkt_clean, 'ProgesteronMICAPL') , 'C1',
-    
+
     stringr::str_detect(produkt_clean, 'Prolutex') , 'C1',
-    
-    
-    
+
+
+
     stringr::str_detect(produkt_clean, 'Visanne') , 'C3',
     stringr::str_detect(produkt_clean, 'Desogestrel') , 'C3',
     stringr::str_detect(produkt_clean, 'Cerazette') , 'C3',
@@ -105,37 +105,37 @@ x2023_mht_lmed_categorize_product_names <- function(x){
     stringr::str_detect(produkt_clean, 'Vinelle') , 'C3',
     stringr::str_detect(produkt_clean, 'Zarelle') , 'C3',
     stringr::str_detect(produkt_clean, 'Slinda') , 'C3',
-    
+
     stringr::str_detect(produkt_clean, 'PrimolutNor') , 'C4',
     stringr::str_detect(produkt_clean, 'Provera') , 'C4',
     stringr::str_detect(produkt_clean, 'Duphaston') , 'C4',
     stringr::str_detect(produkt_clean, 'Orgametril') , 'C4',
     stringr::str_detect(produkt_clean, 'Gestapuran') , 'C4',
     stringr::str_detect(produkt_clean, 'Duphaston') , 'C5',
-    
+
     stringr::str_detect(produkt_clean, 'DepoProvera') , 'D1',
     stringr::str_detect(produkt_clean, 'Nexplanon') , 'D2',
     stringr::str_detect(produkt_clean, 'Implanon') , 'D2',
     stringr::str_detect(produkt_clean, 'Folistrel') , 'D2',
     stringr::str_detect(produkt_clean, 'Jadelle') , 'D3',
-    
+
 
     stringr::str_detect(produkt_clean, 'Jaydess') , 'E1',
     stringr::str_detect(produkt_clean, 'Kyleena') , 'E1',
     stringr::str_detect(produkt_clean, 'Levosert') , 'E1',
     stringr::str_detect(produkt_clean, 'Levosertone') , 'E1',
     stringr::str_detect(produkt_clean, 'Mirena') , 'E1',
-    
+
     stringr::str_detect(produkt_clean, 'Livial') , 'F1',
     stringr::str_detect(produkt_clean, 'Tibelia') , 'F1',
     stringr::str_detect(produkt_clean, 'Tibocina') , 'F1',
     stringr::str_detect(produkt_clean, 'TibolonAristo') , 'F1',
     stringr::str_detect(produkt_clean, 'TibolonMylan') , 'F1',
-    
+
     stringr::str_detect(produkt_clean, 'TibolonOrifarm') , 'F1',
     stringr::str_detect(produkt_clean, 'Boltin') , 'F1',
     stringr::str_detect(produkt_clean, 'Duavive') , 'G1',
-    
+
     stringr::str_detect(produkt_clean, 'Nebido') , 'H1',
     stringr::str_detect(produkt_clean, 'Testogel') , 'H1',
     stringr::str_detect(produkt_clean, 'Undestor') , 'H1',
@@ -147,10 +147,10 @@ x2023_mht_lmed_categorize_product_names <- function(x){
     stringr::str_detect(produkt_clean, 'Testovirondepot') , 'H1',
     stringr::str_detect(produkt_clean, 'Tostran') , 'H1',
     stringr::str_detect(produkt_clean, 'Tostrex') , 'H1',
-    
+
     stringr::str_detect(produkt_clean, 'MiniPe') , 'I1',
     stringr::str_detect(produkt_clean, 'Exlutena') , 'I2'
-    
+
   )
   ]
 }
@@ -262,6 +262,17 @@ x2023_mht_apply_lmed_approaches_to_skeleton <- function(skeleton){
     }
     skeleton[num_of_approaches_at_row_min>1, (approach_name) := "clashingprescriptions"]
     skeleton[, num_of_approaches_at_row_min := NULL]
+
+    # tag all subsequent weeks as clashingprescriptions
+    skeleton[
+      ,
+      (approach_name):= fifelse(
+        any(get(approach_name) == "clashingprescriptions") & seq_len(.N) >= which(get(approach_name) == "clashingprescriptions")[1],
+        "clashingprescriptions",
+        get(approach_name)
+      ),
+      by = id
+    ]
 
     skeleton[, row_min := NULL]
     for(j in run_vars) skeleton[, (j) := NULL]

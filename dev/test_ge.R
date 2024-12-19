@@ -29,7 +29,9 @@ lmed <- fread(
     "fddd"
   ))
 setnames(lmed, "ATC", "atc")
-lmed <- lmed[P1193_LopNr_PersonNr %in% ids]
+swereg::make_lowercase_names(lmed)
+lmed <- lmed[p1193_lopnr_personnr %in% ids]
+setnames(lmed, "p1193_lopnr_personnr", "p1163_lopnr_personnr")
 
 x2023_mht_add_lmed(skeleton, folder)
 gc()
