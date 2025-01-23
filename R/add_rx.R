@@ -12,8 +12,8 @@ add_rx <- function(
       )
     )
 ){
-  if(!"start_date" %in% names(lmed)) lmed[, start_date := edatum]
-  if(!"stop_date" %in% names(lmed)) lmed[, stop_date := edatum + round(fddd)]
+  if(!"start_date" %in% names(lmed)) lmed[, start_date := fdatum]
+  if(!"stop_date" %in% names(lmed)) lmed[, stop_date := fdatum + round(fddd)]
   if(!"start_isoyearweek" %in% names(lmed)) lmed[, start_isoyearweek := cstime::date_to_isoyearweek_c(start_date)]
   if(!"stop_isoyearweek" %in% names(lmed)) lmed[, stop_isoyearweek :=  cstime::date_to_isoyearweek_c(stop_date)]
 
